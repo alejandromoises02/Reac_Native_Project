@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { SafeAreaView, TouchableHighlight } from "react-native";
 import { CategoryTourismo } from "./../CategoryTourismo/CategoryTourismo";
-import miami from "./../../assets/miami.jpg";
-import paris from "./../../assets/paris.jpg";
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCategory } from './../../store/actions/category.action';
+/*import miami from "./../../assets/miami.jpg";
+import paris from "./../../assets/paris.jpg";*/
 
 import { StyleSheet } from "react-native";
 
-const destinos = [
+/*const destinos = [
   {
     id: 1,
     ImageCardBackground: miami,
@@ -23,19 +25,24 @@ const destinos = [
     descripcion:
       "París es la capital de Francia y constituye una de las ciudades más importantes e influyentes del mundo. Desde el punto de vista turístico, París es una de las ciudades más visitadas de Europa.",
   },
-];
+];*/
 
-const categorias = [
-  { id: 1, ImageCardBackground: miami, title: "Viajes" },
-  { id: 2, ImageCardBackground: paris, title: "Paquetes" },
-];
+
 
 export const CategoryTourismoContainer = ({ navigation }) => {
+
+  const dispatch = useDispatch();
+  const categorias = useSelector(state => state.categories.categories);
+  const handleSelected = (item) => {
+    dispatch(selectCategory(item.id));
+    navigation.navigate('Categories', { name: item.title });
+  }
+  
   return (
     <SafeAreaView style={styles.screen}>
       {categorias.map((categoria,i) => (
         <TouchableHighlight key={i}
-          onPress={() => navigation.navigate(`${categoria.title}`)}
+          onPress={() => handleSelected(categoria)}
         >
           <CategoryTourismo  categoria={categoria} />
         </TouchableHighlight>
